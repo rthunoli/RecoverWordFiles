@@ -9,6 +9,9 @@ Public Class Form1
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles BtnRecover.Click
         If (TxtPath.Text <> "") Then
             ProcessDocs()
+        Else
+            MessageBox.Show("Path is empty", Me.Text)
+            TxtPath.Focus()
         End If
     End Sub
 
@@ -78,10 +81,15 @@ Public Class Form1
     End Function
 
     Private Sub BtnPrint_Click(sender As Object, e As EventArgs) Handles BtnPrint.Click
-        If (isDomainUser()) Then
-            PrintDocs()
+        If (TxtPath.Text <> "") Then
+            If (isDomainUser()) Then
+                PrintDocs()
+            Else
+                MsgBox("Login as a domain user to print documents")
+            End If
         Else
-            MsgBox("Login as a domain user to print documents")
+            MessageBox.Show("Path is empty", Me.Text)
+            TxtPath.Focus()
         End If
     End Sub
 End Class
