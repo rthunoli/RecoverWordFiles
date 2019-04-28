@@ -29,6 +29,7 @@ Partial Class Form1
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog()
         Me.BtnBrowse = New System.Windows.Forms.Button()
         Me.BtnPrint = New System.Windows.Forms.Button()
+        Me.PrintDialog1 = New System.Windows.Forms.PrintDialog()
         Me.SuspendLayout()
         '
         'BtnRecover
@@ -73,6 +74,10 @@ Partial Class Form1
         Me.BtnPrint.Text = "Print"
         Me.BtnPrint.UseVisualStyleBackColor = True
         '
+        'PrintDialog1
+        '
+        Me.PrintDialog1.UseEXDialog = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -98,4 +103,5 @@ Partial Class Form1
     Friend WithEvents FolderBrowserDialog1 As FolderBrowserDialog
     Friend WithEvents BtnBrowse As Button
     Friend WithEvents BtnPrint As Button
+    Friend WithEvents PrintDialog1 As PrintDialog
 End Class

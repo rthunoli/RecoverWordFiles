@@ -3,10 +3,11 @@ Imports System.Runtime.InteropServices
 Imports System
 Imports System.IO
 
+
 Public Class Form1
     Dim oWord As Word.Application
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles BtnRecover.Click
+    Private Sub BtnRecover_Click(sender As Object, e As EventArgs) Handles BtnRecover.Click
         If (TxtPath.Text <> "") Then
             ProcessDocs()
         Else
@@ -16,6 +17,7 @@ Public Class Form1
     End Sub
 
     Private Sub PrintDocs()
+        LstFiles.Items.Clear()
         oWord = CreateObject("Word.Application")
         Dim oDoc As Word.Document
         ' Make a reference to a directory.
@@ -24,17 +26,29 @@ Public Class Form1
         Dim fiArr As FileInfo() = di.GetFiles()
         ' Display the names of the files.
         Dim fri As FileInfo
+
         For Each fri In fiArr
-            oDoc = oWord.Documents.Open(fri.FullName)
-            oDoc.PrintOut()
-            oDoc.Close()
-            oDoc = Nothing
+            Dim x = Split(fri.FullName, "\")
+            Try
+                oDoc = oWord.Documents.Open(fri.FullName)
+                oDoc.PrintOut()
+                oDoc.Close()
+                oDoc = Nothing
+
+                LstFiles.Items.Add(x.Last())
+                LstFiles.TopIndex = LstFiles.Items.Count - 1
+            Catch ex As Exception
+
+            End Try
         Next fri
+
         oWord.Application.Quit()
         oWord = Nothing
-
+        MessageBox.Show(LstFiles.Items.Count & " files printed successfully")
     End Sub
+
     Private Sub ProcessDocs()
+        LstFiles.Items.Clear()
         oWord = CreateObject("Word.Application")
         ' Make a reference to a directory.
         Dim di As New DirectoryInfo(TxtPath.Text)
@@ -65,7 +79,6 @@ Public Class Form1
             oDoc = Nothing
             LstFiles.Items.Add(x.Last())
             LstFiles.TopIndex = LstFiles.Items.Count - 1
-            'checkedListBox1.TopIndex = checkedListBox1.Items.Count - 1;
         Catch ex As Exception
 
         End Try
@@ -83,9 +96,13 @@ Public Class Form1
     Private Sub BtnPrint_Click(sender As Object, e As EventArgs) Handles BtnPrint.Click
         If (TxtPath.Text <> "") Then
             If (isDomainUser()) Then
-                PrintDocs()
+                If PrintDialog1.ShowDialog() = DialogResult.OK Then
+                    PrintDocs()
+                Else
+                    MessageBox.Show("Print Cancelled")
+                End If
             Else
-                MsgBox("Login as a domain user to print documents")
+                MessageBox.Show("Login as a domain user to print documents")
             End If
         Else
             MessageBox.Show("Path is empty", Me.Text)
